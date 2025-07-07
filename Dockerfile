@@ -1,8 +1,14 @@
-FROM maven:3.8.4-openjdk-17 AS build
-COPY . .
-RUN mvn package
-
+# Use official OpenJDK 17 image
 FROM openjdk:17-jdk-slim
-COPY --from=build /target/*.jar app.jar
+
+# Set working directory
+WORKDIR /app
+
+# Copy built JAR into container
+COPY target/*.jar app.jar
+
+# Expose application port
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","app.jar"]
+
+# Start the application
+ENTRYPOINT ["java", "-jar", "app.jar"]
